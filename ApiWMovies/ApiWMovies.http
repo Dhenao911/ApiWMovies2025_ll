@@ -1,0 +1,6 @@
+@ApiWMovies_HostAddress = http://localhost:5100
+
+GET {{ApiWMovies_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
