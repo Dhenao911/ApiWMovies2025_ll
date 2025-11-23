@@ -1,10 +1,20 @@
 ﻿using ApiWMovies.DAL.Dtos;
+using ApiWMovies.Repository.IRepository;
 using ApiWMovies.Service.IService;
+using AutoMapper;
 
 namespace ApiWMovies.Service
 {
     public class CategoryService : ICategoryService
     {
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
+
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+        {
+            _categoryRepository = categoryRepository;
+            _mapper = mapper;
+        }
         public Task<bool> CategoryExistsByIdAsync(int id)
         {
             throw new NotImplementedException();
@@ -25,14 +35,18 @@ namespace ApiWMovies.Service
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<CategoryDto>> GetCategoryAsync()
+        public async Task<ICollection<CategoryDto>> GetCategoryAsync()
         {
-            throw new NotImplementedException();
+            var categories =  await  _categoryRepository.GetCategoryAsync();
+
+            return _mapper.Map<ICollection<CategoryDto>>(categories);
         }
 
-        public Task<CategoryDto> GetCategoryAsync(int id)
+
+        public async Task<CategoryDto> GetCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await _categoryRepository.GetCategoryAsync(id);
+            return _mapper.Map<CategoryDto>(category);
         }
 
         public Task<CategoryDto> UpdateCategoryAsync(int id, CategoryUpdateCreateDto categoryUpdateDto)

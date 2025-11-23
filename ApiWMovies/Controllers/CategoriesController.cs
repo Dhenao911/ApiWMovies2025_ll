@@ -27,5 +27,23 @@ namespace ApiWMovies.Controllers
 
             return Ok(categories);
         }
+
+        [HttpGet("{id:int}", Name = "GetCategoryAsync")]
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<ActionResult<CategoryDto>> GetCategoryAsync(int id)
+        {
+            var category = await _categoryService.GetCategoryAsync(id);
+            if (category==null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
     }
 }

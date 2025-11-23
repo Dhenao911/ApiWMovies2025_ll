@@ -1,7 +1,21 @@
 using ApiWMovies.DAL;
+using ApiWMovies.MoviesMapper;
+using ApiWMovies.Repository;
+using ApiWMovies.Repository.IRepository;
+using ApiWMovies.Service;
+using ApiWMovies.Service.IService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAutoMapper(x => x.AddProfile<Mappers>());
+
+//Inject the Repository Layer
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+//Inject the Service Layer
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Add services to the container.
 
