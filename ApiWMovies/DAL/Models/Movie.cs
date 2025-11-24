@@ -4,18 +4,17 @@ namespace ApiWMovies.DAL.Models;
 
 public class Movie : AuditBase
 {
-    [Required]
+    [Required(ErrorMessage = "El campo {0} es obligatorio")]
     [Display(Name = "Movie Name")]
+    [MaxLength(100, ErrorMessage = "El campo {0} debe tener maximo {1} caracteres")]
     public string Name { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "El campo {0} es obligatorio")]
     public int Duration { get; set; }
 
-   
     public string? Description { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "El campo {0} es obligatorio")]
+    [MaxLength(10, ErrorMessage = "El campo {0} debe tener maximo {1} caracteres")]
     public string Clasification { get; set; }
-
-
 }

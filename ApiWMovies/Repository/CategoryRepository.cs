@@ -14,6 +14,21 @@ namespace ApiWMovies.Repository
             _context = context;
         }
 
+        public async Task<ICollection<Category>> GetCategoryAsync()
+        {
+            return await _context.Categories
+                 .AsNoTracking()
+                 .OrderBy(c => c.Name)
+                 .ToListAsync();
+        }
+
+        public async Task<Category> GetCategoryAsync(int id)
+        {
+            return await _context.Categories
+                 .AsNoTracking()
+                 .FirstOrDefaultAsync(c => c.id == id);
+        }
+
         public async Task<bool> CategoryExistsByIdAsync(int id)
         {
             return await _context.Categories
@@ -37,6 +52,15 @@ namespace ApiWMovies.Repository
             return await SaveAsync();
         }
 
+        public async Task<bool> UpdateCategoryAsync(Category category)
+        {
+            category.UpdateDate = DateTime.UtcNow;
+
+            _context.Categories.Update(category);
+
+            return await SaveAsync();
+        }
+
         public async Task<bool> DeleteCategoryAsync(int id)
         {
             var category = await GetCategoryAsync(id);
@@ -47,30 +71,6 @@ namespace ApiWMovies.Repository
             }
 
             _context.Categories.Remove(category);
-
-            return await SaveAsync();
-        }
-
-        public async Task<ICollection<Category>> GetCategoryAsync()
-        {
-            return await _context.Categories
-                 .AsNoTracking()
-                 .OrderBy(c=>c.Name)
-                 .ToListAsync();
-        }
-
-        public async Task<Category> GetCategoryAsync(int id)
-        {
-            return await _context.Categories
-                 .AsNoTracking()
-                 .FirstOrDefaultAsync(c => c.id == id);
-        }
-
-        public async Task<bool> UpdateCategoryAsync(Category category)
-        {
-            category.UpdateDate = DateTime.UtcNow;
-
-            _context.Categories.Update(category);
 
             return await SaveAsync();
         }

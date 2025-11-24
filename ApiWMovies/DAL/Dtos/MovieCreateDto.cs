@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata.Ecma335;
 
 namespace ApiWMovies.DAL.Dtos
 {
-    public class MovieDto
+    public class MovieCreateDto
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [Display(Name = "Movie Name")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener maximo {1} caracteres")]
@@ -20,9 +17,5 @@ namespace ApiWMovies.DAL.Dtos
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [MaxLength(10, ErrorMessage = "El campo {0} debe tener maximo {1} caracteres")]
         public string Clasification { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        public DateTime? UpdateDate { get; set; }
     }
 }
