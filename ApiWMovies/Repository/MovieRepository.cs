@@ -14,6 +14,21 @@ namespace ApiWMovies.Repository
             _context = context;
         }
 
+        public async Task<ICollection<Movie>> GetMovieAsync()
+        {
+            return await _context.Movies
+                         .AsNoTracking()
+                         .OrderBy(m => m.Name)
+                         .ToListAsync();
+        }
+
+        public async Task<Movie> GetMovieAsync(int id)
+        {
+            return await _context.Movies
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(m => m.id == id);
+        }
+
         public async Task<bool> CreateMovieAsync(Movie movie)
         {
             movie.CreatedDate = DateTime.UtcNow;
@@ -31,35 +46,6 @@ namespace ApiWMovies.Repository
 
             _context.Movies.Remove(movieDelete);
             return await SaveAsync();
-        }
-
-        public async Task<ICollection<Movie>> GetMovieAsync()
-        {
-            return await _context.Movies
-                         .AsNoTracking()
-                         .OrderBy(m => m.Name)
-                         .ToListAsync();
-        }
-
-        public async Task<Movie> GetMovieAsync(int id)
-        {
-            return await _context.Movies
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(m => m.id == id);
-        }
-
-        public async Task<bool> MovieExistsByIdAsync(int id)
-        {
-            return await _context.Movies
-                         .AsNoTracking()
-                         .AnyAsync(m => m.id == id);
-        }
-
-        public async Task<bool> MovieExistsByNameAsync(string name)
-        {
-            return await _context.Movies
-                        .AsNoTracking()
-                        .AnyAsync(m => m.Name == name);
         }
 
         public async Task<bool> UpdateMovieAsync(Movie movie)

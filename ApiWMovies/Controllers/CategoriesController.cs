@@ -101,7 +101,7 @@ public class CategoriesController : ControllerBase
             return Ok(categoryUpdated);
         }
         //retorna un 404 si la categoria no existe por id
-        catch (InvalidOperationException ex1) when (ex1.Message.Contains(" no existe"))
+        catch (InvalidOperationException ex1) when (ex1.Message.Contains("No existe"))
         {
             return NotFound(ex1.Message);
         }

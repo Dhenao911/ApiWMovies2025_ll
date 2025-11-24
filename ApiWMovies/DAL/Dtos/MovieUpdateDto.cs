@@ -8,5 +8,7 @@ namespace ApiWMovies.DAL.Dtos
         [Display(Name = "Movie Name")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener maximo {1} caracteres")]
         public string Name { get; set; }
+
+        public string? Description { get; set; }
     }
 }

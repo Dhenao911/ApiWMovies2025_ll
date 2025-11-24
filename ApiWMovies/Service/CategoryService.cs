@@ -73,8 +73,8 @@ public class CategoryService : ICategoryService
             throw new InvalidOperationException($"No existe una categoria con el id '{id}' ");
         }
 
-        var nameExist = await CategoryExistsByNameAsync(categoryUpdateDto.Name);
-        if (nameExist)
+        var CategorynameExist = await CategoryExistsByNameAsync(categoryUpdateDto.Name);
+        if (CategorynameExist)
         {
             throw new InvalidOperationException($"Ya existe una categoria con el nombre de '{categoryUpdateDto.Name}' ");
         }

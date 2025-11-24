@@ -12,10 +12,12 @@ builder.Services.AddAutoMapper(x => x.AddProfile<Mappers>());
 //Inject the Repository Layer
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 //Inject the Service Layer
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 // Add services to the container.
 
