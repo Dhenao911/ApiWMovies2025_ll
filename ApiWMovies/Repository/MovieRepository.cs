@@ -59,5 +59,12 @@ namespace ApiWMovies.Repository
         {
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
+
+        public Task<bool> MovieExistsByNameAsync(string name)
+        {
+            return _context.Movies
+                 .AsNoTracking()
+                 .AnyAsync(m => m.Name == name);
+        }
     }
 }

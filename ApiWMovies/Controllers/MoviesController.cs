@@ -14,7 +14,7 @@ namespace ApiWMovies.Controllers
         {
             _movieService = movieService;
         }
-
+        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,9 +53,9 @@ namespace ApiWMovies.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] MovieCreateDto movieCreateDto)
+        public async Task<ActionResult<MovieDto>> CreateMovieAsync([FromBody] MovieUpdateCreateDto movieCreateDto)
         {
-            //Salvarguardar la integridad del modelo
+            //Protetect the model integrity
 
             if (!ModelState.IsValid)
             {
@@ -64,21 +64,23 @@ namespace ApiWMovies.Controllers
 
             try
             {
-                //Llamar al servicio para crear la categoría
+                //Call the service to create the movie
                 var createMovie = await _movieService.CreateMovieAsync(movieCreateDto);
 
-                //Vamos a retornar un 201 Created con la ruta para obtener la categoria creada
+                //Return the 201 Created
 
-                return CreatedAtRoute("GetMovieAsync", //Nombre de la ruta
-                    new { id = createMovie.Id }, //Parametros de la ruta
-                    createMovie);//Objeto a retornar
+                return CreatedAtRoute("GetMovieAsync", //Route name
+                    new { id = createMovie.Id }, //Route parameters
+                    createMovie);//Return object created
             }
             catch (InvalidOperationException ex) when (ex.Message.Contains("Ya existe"))
             {
+                //Caprure the exception 409 Conflict  when the movie name already exists
                 return Conflict(ex.Message);
             }
             catch (Exception ex1)
             {
+                //Capture any other exception 500 Internal Server Error when the movies cannot be created
                 return StatusCode(StatusCodes.Status500InternalServerError, ex1.Message);
             }
         }
@@ -89,9 +91,9 @@ namespace ApiWMovies.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<MovieDto>> UpdateMovieAsync(int id, [FromBody] MovieUpdateDto movieUpdateDto)
+        public async Task<ActionResult<MovieDto>> UpdateMovieAsync(int id, [FromBody] MovieUpdateCreateDto movieUpdateDto)
         {
-            //Salvarguardar la integridad del modelo
+            //Protetect the model integrity
 
             if (!ModelState.IsValid)
             {
@@ -100,42 +102,52 @@ namespace ApiWMovies.Controllers
 
             try
             {
+                //Call the service to update the movie
                 var updateMovie = await _movieService.UpdateMovieAsync(id, movieUpdateDto);
+
+                //Return the updated category
                 return Ok(updateMovie);
             }
             catch (InvalidOperationException ex) when (ex.Message.Contains("Ya existe"))
             {
+                //Caprure the exception 409 Conflict  when the movie name already exists
                 return Conflict(ex.Message);
             }
             catch (InvalidOperationException ex1) when (ex1.Message.Contains("No existe"))
             {
+                //Capture the exception 404 Not Found when the movie id does not exist
                 return NotFound(ex1.Message);
             }
             catch (Exception ex2)
             {
+                //Capture any other exception 500 Internal Server Error when the movies cannot be updated
                 return StatusCode(StatusCodes.Status500InternalServerError, ex2.Message);
             }
         }
 
-        [HttpDelete("{id}",Name ="DeleteMovieAsync")]
+        [HttpDelete("{id}", Name = "DeleteMovieAsync")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public async Task<ActionResult>DeleteMoviesync(int id)
+        public async Task<ActionResult> DeleteMoviesync(int id)
         {
             try
             {
+                //Call the service to delete the movie for the id
                 var deleteMovie = await _movieService.DeleteMovieAsync(id);
+
+                //return the 200 OK with the delete result
                 return Ok(deleteMovie);
             }
-            catch(InvalidOperationException ex) when (ex.Message.Contains("No existe"))
+            catch (InvalidOperationException ex) when (ex.Message.Contains("No existe"))
             {
+                //Capture the exception 404 Not Found when the movie id does not exist
                 return NotFound(ex.Message);
             }
             catch (Exception ex2)
             {
+                //Capture any other exception 500 Internal Server Error when the movies cannot be deleted
                 return StatusCode(StatusCodes.Status500InternalServerError, ex2.Message);
             }
         }

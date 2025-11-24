@@ -12,9 +12,8 @@ public class Mappers : Profile
         CreateMap<Category, CategoryDto>().ReverseMap();
         CreateMap<Category, CategoryUpdateCreateDto>().ReverseMap();
         CreateMap<Movie, MovieDto>().ReverseMap();
-        CreateMap<Movie, MovieCreateDto>().ReverseMap();
-        CreateMap<Movie,MovieUpdateDto>().ReverseMap();
-        CreateMap<Movie, MovieCreateDto>().ReverseMap();
+        CreateMap<Movie, MovieUpdateCreateDto>().ReverseMap();
+        CreateMap<Movie, MovieUpdateCreateDto>().ReverseMap();
 
     }
 }

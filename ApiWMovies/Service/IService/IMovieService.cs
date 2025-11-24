@@ -8,9 +8,9 @@ namespace ApiWMovies.Service.IService
 
         Task<MovieDto> GetMovieAsync(int id);// return a single movie by id
 
-        Task<MovieDto> CreateMovieAsync(MovieCreateDto movieCreateDto);// create a new movie
+        Task<MovieDto> CreateMovieAsync(MovieUpdateCreateDto movieCreateDto);// create a new movie
 
-        Task<MovieDto> UpdateMovieAsync(int id, MovieUpdateDto movieUpdateDto);// update an existing movie
+        Task<MovieDto> UpdateMovieAsync(int id, MovieUpdateCreateDto movieUpdateDto);// update an existing movie
 
         Task<bool> DeleteMovieAsync(int id);// delete a movie by id
     }

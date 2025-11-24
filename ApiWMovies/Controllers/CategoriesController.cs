@@ -39,7 +39,7 @@ public class CategoriesController : ControllerBase
 
             return Ok(categoryDto);
         }
-        catch (InvalidOperationException ex) when (ex.Message.Contains("N o existe"))
+        catch (InvalidOperationException ex) when (ex.Message.Contains("No existe"))
         {
             return NotFound(ex.Message);
         }
@@ -57,7 +57,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CategoryDto>> CreateCategoryAsync([FromBody] CategoryUpdateCreateDto categoryCreateDto)
     {
-        //Salvarguar la integridad del modelo
+        //Protetect the model integrity
         if (!ModelState.IsValid)
         {
             return BadRequest();
@@ -66,11 +66,11 @@ public class CategoriesController : ControllerBase
         try
         {
             var CategoryDto = await _categoryService.CreateCategoryAsync(categoryCreateDto);
-            //Vamos a retornar un 201 Created con la ruta para obtener la categoria creada
 
-            return CreatedAtRoute("GetCategoryAsync" //Nombre de la ruta
-                , new { id = CategoryDto.Id },//Parametros de la ruta
-                CategoryDto);//Objeto a retornar
+            //Return 201 create
+            return CreatedAtRoute("GetCategoryAsync" //Route name
+                , new { id = CategoryDto.Id },//Route parameter
+                CategoryDto);//Return Object
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("Ya existe"))
         {
@@ -90,6 +90,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<CategoryDto>> UpdateCategoryAsync(int id, [FromBody] CategoryUpdateCreateDto categoryUpdateDto)
     {
+        //Protetect the model integrity
         if (!ModelState.IsValid)
         {
             return BadRequest();
@@ -98,18 +99,21 @@ public class CategoriesController : ControllerBase
         try
         {
             var categoryUpdated = await _categoryService.UpdateCategoryAsync(id, categoryUpdateDto);
+
+            //Return 200Ok
             return Ok(categoryUpdated);
         }
-        //retorna un 404 si la categoria no existe por id
+        //return  NoFound() when the category id does not exist
         catch (InvalidOperationException ex1) when (ex1.Message.Contains("No existe"))
         {
             return NotFound(ex1.Message);
         }
-        //retorna un 409 si la categoria ya existe por nombre al momento de la actualizacion
+        //return  Conflict When the category name already exists
         catch (InvalidOperationException ex) when (ex.Message.Contains("Ya existe"))
         {
             return Conflict(ex.Message);
         }
+        //Retur 500 InternalServerError when the category cannot be updated
         catch (Exception ex)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
@@ -129,7 +133,7 @@ public class CategoriesController : ControllerBase
             var deletedCategory = await _categoryService.DeleteCategoryAsync(id);
             return Ok(deletedCategory);
         }
-        //retorna un 404 si la categoria no existe por id
+        
         catch (InvalidOperationException ex1) when (ex1.Message.Contains("No existe"))
         {
             return NotFound(ex1.Message);
